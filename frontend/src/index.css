@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-unbounded: "Unbounded", "sans-serif"; 
+}
+
+@layer utilities {
+  .underline-hover {
+    @apply relative cursor-pointer text-white;
+  }
+
+  .underline-hover::after {
+    content: "";
+    @apply absolute left-1/2 bottom-0 h-[2px] w-0 bg-white transition-all duration-300;
+    transform: translateX(-50%);
+  }
+
+  .underline-hover:hover::after {
+    @apply w-full;
+  }
+}
+
+
+
+
+body {
+  background-color: #030303;
+}
