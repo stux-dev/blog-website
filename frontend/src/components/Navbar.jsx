@@ -12,20 +12,15 @@ export default function Navbar() {
 
             <div className="h-full w-auto flex items-center justify-between gap-8 font-mono">
                 
-                <div className="text-white cursor-pointer underline-hover">Contact Us</div>
-
-                <div className="text-white cursor-pointer underline-hover">Contact Us</div>
                 <div className="text-white cursor-pointer underline-hover">About Us</div>
                 <div className="text-white cursor-pointer underline-hover">
                     Login & Register
                 </div>
-                
                
             </div>
  
         </div>
         
-
 
     </nav>
 }
