@@ -54,7 +54,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     const existingUser = await findUserByEmail(email);
 
     if (!existingUser) {
-        return res.status(404).json({ message: "User not found" });
+        return next(new ErrorResponse("User not Found", 404));
     }
 
     const hashedPassword = existingUser.password;
@@ -62,12 +62,18 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, hashedPassword);
 
     if (!isMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        return next(new ErrorResponse("Invalid Credentials", 401));
     }
 
     const token = generateToken({ email });
+    const { password: pwd, created_at, ...cleanedUser } = existingUser;
 
-    res.status(200).json({ success: true, message: "Login successful", token });
+    res.status(200).json({
+        success: true,
+        message: "Login successful",
+        token,
+        user: cleanedUser,
+    });
 });
 
 export const verifyOtp = asyncHandler(async (req, res, next) => {
@@ -84,7 +90,8 @@ export const verifyOtp = asyncHandler(async (req, res, next) => {
     const isOtpValid = await bcrypt.compare(user.otp, userData.otp);
     if (!isOtpValid) return res.status(400).json({ message: "Invalid OTP!" });
 
-    await createUser(userData);
+    const createdUser = await createUser(userData);
+    const { password: pwd, created_at, ...cleanedUser } = createdUser;
 
     const token = generateToken({ email: userData.email });
     await client.del(userData.email);
@@ -92,5 +99,6 @@ export const verifyOtp = asyncHandler(async (req, res, next) => {
     res.status(201).json({
         message: "OTP verified! User registered successfully.",
         token,
+        user : cleanedUser
     });
 });

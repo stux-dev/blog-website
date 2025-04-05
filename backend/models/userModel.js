@@ -1,10 +1,12 @@
 import db from "../config/db.js"
 
 export const createUser = async (user) => {
-    await db.execute({
-        sql : `INSERT INTO users (first_name, last_name, dob, email, password) values (?, ?, ?, ?, ?)`,
+    const insertedUser = await db.execute({
+        sql : `INSERT INTO users (first_name, last_name, dob, email, password) values (?, ?, ?, ?, ?) RETURNING *`,
         args : [user.first_name, user.last_name, user.dob, user.email, user.password],
     })
+
+    return insertedUser.rows[0];
 }
 
 export const findUserByEmail = async (email) => {
