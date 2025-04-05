@@ -1,27 +1,16 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
-import Navbar from './components/Navbar'
-import './App.css'
-import Home from "./pages/Home"
-import Menubar from "./components/Menubar"
+
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import AppRoutes from "./AppRoutes"; 
 
 function App() {
- 
-
   return (
-    <>
     <Router>
-      <Navbar/>
-      <Menubar/>
-        <div className="pt-16">
-          <Routes>
-            <Route path="/" element={<Home />} />
-
-          </Routes>
-        </div>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </Router>
-      
-    </>
-  )
+  );
 }
 
-export default App
+export default App;
