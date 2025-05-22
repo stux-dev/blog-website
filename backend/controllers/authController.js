@@ -37,6 +37,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         Math.floor(100000 + Math.random() * 900000).toString();
 
     const otp = generateOTP();
+    console.log(`otp : ${otp}`)
     await sendMail(user.email, user.first_name, otp);
 
     user.otp = await bcrypt.hash(otp, parseInt(process.env.SALT_ROUNDS));
@@ -65,7 +66,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Invalid Credentials", 401));
     }
 
-    const token = generateToken({ email });
+    const token = generateToken({ first_name : existingUser.first_name ,email });
     const { password: pwd, created_at, ...cleanedUser } = existingUser;
 
     res.status(200).json({
@@ -88,12 +89,12 @@ export const verifyOtp = asyncHandler(async (req, res, next) => {
     const userData = JSON.parse(otpData);
 
     const isOtpValid = await bcrypt.compare(user.otp, userData.otp);
-    if (!isOtpValid) return res.status(400).json({ message: "Invalid OTP!" });
+    if (!isOtpValid) return res.status(400).json({ message: "Invalid OTP!" });  
 
     const createdUser = await createUser(userData);
     const { password: pwd, created_at, ...cleanedUser } = createdUser;
 
-    const token = generateToken({ email: userData.email });
+    const token = generateToken({ first_name: userData.first_name ,email: userData.email });
     await client.del(userData.email);
 
     res.status(201).json({
