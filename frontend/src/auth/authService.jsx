@@ -43,3 +43,14 @@ export const registerUser = async (first_name, last_name, dob, email, password) 
     throw error;
   }
 };
+
+export const verifyOtp = async(email, otp) => {
+  try{
+    const { data } = await API.post("/verify-otp", {email, otp});
+    return data;
+  }
+  catch (error){
+    console.error("OTP verification Failed!",error.response?.data?.message || error.message)
+    throw error;
+  }
+}
