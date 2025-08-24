@@ -84,7 +84,7 @@ function ProfileDropdown({ user }){
         className="flex items-center focus:outline-none"
       >
         <img
-          className="w-10 h-10 rounded-full border-2 border-gray-500 hover:border-white transition-colors duration-300"
+          className="w-10 h-10 rounded-full border-2 border-gray-500 hover:border-[#14FFEC] transition-colors duration-300"
           src={placeHolderUrl}
           alt="User Avatar"
           onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/100x100/CCCCCC/FFFFFF?text=U`; }}
@@ -94,48 +94,49 @@ function ProfileDropdown({ user }){
       {/* The Dropdown Menu */}
       {/* Uses a transition for a smooth fade-in/fade-out effect */}
       <div
-        className={`
-          absolute right-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-xl overflow-hidden
-          transition-all duration-300 ease-out transform
-          ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
-        `}
-      >
-        <div className="py-2">
-          {/* User Info Section */}
-          <div className="px-4 py-2 border-b border-gray-700 select-text">
-            <p className="text-sm font-semibold text-white">{fullName}</p>
-            <p className="text-xs text-gray-400">{user.email}</p>
-          </div>
-          
-          {/* Menu Items that now close the dropdown on click */}
-          <a
-            href="#"
-            onClick={closeDropdown}
-            className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200"
-          >
-            <User className="w-4 h-4 mr-3" />
-            <span>Profile</span>
-          </a>
-          <a
-            href="#"
-            onClick={closeDropdown}
-            className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200"
-          >
-            <Settings className="w-4 h-4 mr-3" />
-            <span>Settings</span>
-          </a>
-          
-          {/* Log Out Item with special hover effect */}
-          <a
-            href="#"
-            onClick={closeDropdown && logout}
-            className="flex items-center px-4 py-2 text-sm text-red-400 hover:bg-red-500 hover:text-white transition-colors duration-200"
-          >
-            <LogOut className="w-4 h-4 mr-3" />
-            <span>Log Out</span>
-          </a>
-        </div>
-      </div>
+  className={`
+    absolute right-0 mt-2 w-56 origin-top-right bg-[#1d1d1d] border border-[#3C3C3C] rounded-lg shadow-xl overflow-hidden
+    transition-all duration-300 ease-out
+    ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
+  `}
+>
+  {/* The p-1 gives the items space from the edge so the glow is visible */}
+  <div className="p-1">
+    {/* User Info Section */}
+    <div className="px-3 py-2 border-b border-[#3C3C3C] mb-1 select-text">
+      <p className="text-sm font-semibold text-white">{fullName}</p>
+      <p className="text-xs text-gray-400">{user.email}</p>
+    </div>
+    
+    {/* --- Menu Items with Subtle Glow Hover --- */}
+    <a
+      href="#"
+      onClick={closeDropdown}
+      className="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors duration-200"
+    >
+      <User className="w-4 h-4 mr-3" />
+      <span>Profile</span>
+    </a>
+    <a
+      href="#"
+      onClick={closeDropdown}
+      className="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors duration-200"
+    >
+      <Settings className="w-4 h-4 mr-3" />
+      <span>Settings</span>
+    </a>
+    
+    {/* --- Log Out Item with Subtle Glow Hover --- */}
+    <a
+      href="#"
+      onClick={() => { closeDropdown(); logout(); }}
+      className="flex items-center px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-md transition-colors duration-200"
+    >
+      <LogOut className="w-4 h-4 mr-3" />
+      <span>Log Out</span>
+    </a>
+  </div>
+</div>
     </div> 
   )
 }
