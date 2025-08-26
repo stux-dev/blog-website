@@ -9,7 +9,7 @@ const API = axios.create({
 
 export const loginUser = async (email, password) => {
   try {
-    const { data } = await API.post("/login", { email, password });
+    const { data } = await API.post("/api/auth/login", { email, password });
     return {
       "token" : data.token,
       "user" : data.user
@@ -30,7 +30,7 @@ export const setAuthToken = (token) => {
 
 export const registerUser = async (first_name, last_name, dob, email, password) => {
   try {
-    const { data } = await API.post("/register", {
+    const { data } = await API.post("/api/auth/register", {
       first_name,
       last_name,
       dob,
@@ -46,7 +46,7 @@ export const registerUser = async (first_name, last_name, dob, email, password) 
 
 export const verifyOtp = async(email, otp) => {
   try{
-    const { data } = await API.post("/verify-otp", {email, otp});
+    const { data } = await API.post("/api/auth/verify-otp", {email, otp});
     return data;
   }
   catch (error){
