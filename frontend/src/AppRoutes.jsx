@@ -7,6 +7,7 @@ import Register from "./auth/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import MyEditor from "./components/MyEditor";
 
 function AppRoutes() {
     const location = useLocation();
@@ -31,6 +32,14 @@ function AppRoutes() {
                                 <Dashboard />
                             </ProtectedRoute>
                         }
+                    />
+                    <Route 
+                        path="/create-blog" 
+                        element={
+                            <ProtectedRoute>
+                                <MyEditor/>
+                            </ProtectedRoute>
+                        } 
                     />
                 </Routes>
             </div>
