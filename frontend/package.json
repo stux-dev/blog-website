@@ -10,9 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocknote/core": "^0.37.0",
+    "@blocknote/mantine": "^0.37.0",
+    "@blocknote/react": "^0.37.0",
     "@tailwindcss/vite": "^4.0.17",
+    "@tanstack/react-query": "^5.86.0",
     "axios": "^1.8.4",
-    "framer-motion": "^12.6.3",
+    "framer-motion": "^12.23.12",
     "googleapis": "^148.0.0",
     "lucide-react": "^0.541.0",
     "nodemailer": "^6.10.0",
