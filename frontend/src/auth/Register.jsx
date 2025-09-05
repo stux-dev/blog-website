@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser, setAuthToken, verifyOtp } from "./authService";
+import { registerUser, setAuthToken, verifyOtp } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 
 export default function Register() {

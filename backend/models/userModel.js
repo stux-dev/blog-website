@@ -9,6 +9,15 @@ export const createUser = async (user) => {
     return insertedUser.rows[0];
 }
 
+export const findUserById = async(userId) => {
+    const result = await db.execute({
+        sql : `SELECT 1 FROM users WHERE id = ? LIMIT 1`,
+        args: [userId],
+    })
+
+    return result.rows.length > 0;
+}
+
 export const findUserByEmail = async (email) => {
     const result = await db.execute({
         sql : `SELECT * FROM users WHERE email=?`,

@@ -1,15 +1,10 @@
-import axios from "axios";
 
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import apiClient from "../api/apiClient";
+
 
 export const loginUser = async (email, password) => {
   try {
-    const { data } = await API.post("/api/auth/login", { email, password });
+    const { data } = await apiClient.post("/api/auth/login", { email, password });
     return {
       "token" : data.token,
       "user" : data.user
@@ -22,15 +17,15 @@ export const loginUser = async (email, password) => {
 
 export const setAuthToken = (token) => {
   if (token) {
-    API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
-    delete API.defaults.headers.common["Authorization"];
+    delete apiClient.defaults.headers.common["Authorization"];
   }
 };
 
 export const registerUser = async (first_name, last_name, dob, email, password) => {
   try {
-    const { data } = await API.post("/api/auth/register", {
+    const { data } = await apiClient.post("/api/auth/register", {
       first_name,
       last_name,
       dob,
@@ -46,7 +41,7 @@ export const registerUser = async (first_name, last_name, dob, email, password) 
 
 export const verifyOtp = async(email, otp) => {
   try{
-    const { data } = await API.post("/api/auth/verify-otp", {email, otp});
+    const { data } = await apiClient.post("/api/auth/verify-otp", {email, otp});
     return data;
   }
   catch (error){
