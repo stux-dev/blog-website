@@ -13,7 +13,7 @@ export default function MyEditor() {
   useEditorChange((editor)=>{
     const savedBlokcs = JSON.stringify(editor.document);
    
-    console.log(savedBlokcs);
+    console.log(JSON.stringify(savedBlokcs));
   }, editor)
 
   // Render the editor within a styled container

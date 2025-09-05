@@ -6,8 +6,10 @@ const router = Router();
 
 
 router.post("/create", authMiddleware ,createBlog);
-router.get("/:slug", getBlogBySlug);
 router.get("/blogs", getAllBlogs);
+
+// Static before Dynamic bcz of the waterfall method
+router.get("/:slug", getBlogBySlug);
 
 
 export default router;
