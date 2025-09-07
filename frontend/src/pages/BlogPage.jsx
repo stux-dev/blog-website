@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom'
 import { blogService } from '../services/blogService';
 import { useCreateBlockNote } from '@blocknote/react';
 import { BlockNoteView } from '@blocknote/mantine';
+import "@blocknote/mantine/style.css";
+import "@blocknote/core/fonts/inter.css";
+import { useLoading } from '../context/LoadingContext';
 
 const BlogPage = () => {
 
@@ -13,6 +16,8 @@ const BlogPage = () => {
         queryFn : () => blogService.getBySlug(slug),
         enabled: !!slug,
     })
+
+    const {showLoader, hideLoader} = useLoading();
     
     const formatDate = (timestamp) => {
         const date = new Date(timestamp * 1000);
@@ -31,9 +36,16 @@ const BlogPage = () => {
         }
     }, [editor, blog])
 
-    if(isLoading){
-        return <div className='text-white'>Loading Blog...</div>
-    } 
+    useEffect(() => {
+        if (isLoading) {
+            showLoader();
+        } else {
+            hideLoader();
+        }
+        // Cleanup function to hide loader if component unmounts
+        return () => hideLoader();
+    }, [isLoading, showLoader, hideLoader])
+
 
     if(error){
         return <div className='text-white'>Error Loading Blog</div>
