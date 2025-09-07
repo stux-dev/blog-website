@@ -14,7 +14,7 @@ export default function Login() {
     const authdata = await loginUser(email, password);
 
     if (authdata.token) {
-      setAuthToken(authdata.token);
+      setAuthToken(authdata.token)
       login(authdata.token, authdata.user);
       navigate("/dashboard");
     }

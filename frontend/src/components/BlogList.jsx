@@ -1,16 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useQuery} from '@tanstack/react-query'
 import { blogService } from '../services/blogService'
 import BlogCard from './BlogCard'
+import { useLoading } from '../context/LoadingContext'
 const BlogList = () => {
 
+    const {showLoader, hideLoader} = useLoading();
     const { data: blogs , error, isLoading} = useQuery({
         queryKey: ['blogs'],
         queryFn: blogService.getAll
     })
 
 
-    if (isLoading) return <p>Loading blogs...</p>;
+    useEffect(() => {
+        if (isLoading) {
+            showLoader();
+        } else {
+            hideLoader();
+        }
+
+        // Optional: Ensure the loader is hidden if the component unmounts while loading
+        return () => hideLoader();
+    }, [isLoading, showLoader, hideLoader]);
     if (error) return <p>An error occurred: {error.message}</p>;
 
     return (

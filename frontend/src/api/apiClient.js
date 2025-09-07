@@ -7,8 +7,27 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     
-  },
-  timeout: 10000, 
+  }, 
 });
+
+apiClient.interceptors.request.use(
+  (config) => {
+    // Get the token from local storage
+    const token = localStorage.getItem('token');
+
+    // If the token exists, add it to the Authorization header
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // IMPORTANT: return the config object
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 
 export default apiClient;

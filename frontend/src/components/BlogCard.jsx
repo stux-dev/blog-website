@@ -18,7 +18,7 @@ const BlogCard = ({blog}) => {
 
 
     return (
-        <div className="relative group bg-[#1A1A1A] border font-poppins border-gray-700 rounded-lg p-6 shadow-md hover:shadow-lg hover:border-gray-500 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+        <div className="relative mb-3 group bg-[#1A1A1A] border font-poppins border-gray-700 rounded-lg p-6 shadow-md hover:shadow-lg hover:border-gray-500 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
             <div className="flex flex-col h-full">
                 {/* Blog Title */}
                 {/* The hover effect is changed here: removed text color change, added underline properties. */}
