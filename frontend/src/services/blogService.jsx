@@ -21,13 +21,37 @@ export const blogService = {
         }
     },
 
+    getById: async(blogId) => {
+        try{
+            const response = await apiClient.get(`/api/blog/id/${blogId}`);
+            return response.data;
+        }
+        catch(error){
+            console.error(`Error fetching blog with blogId ${blogId}:`, error);
+            throw error;
+        }
+    },
+
     create: async(blogData) => {
         try{
-            const response = await apiClient.post("/api/blog/create", blogData);
+            const response = await apiClient.post("/api/blog/new", blogData);
             return response.data;
         }catch(error){
             console.error('Error creating blog:', error);
             throw error;
         }
+    },
+
+    update: async(blogId,blogData) => {
+        try{
+
+            const response = await apiClient.patch(`/api/blog/${blogId}`, blogData);
+            return response.data;
+        }
+        catch(error){
+            console.error('Error updating blog:', error);
+            throw error;
+        }
     }
+
 }

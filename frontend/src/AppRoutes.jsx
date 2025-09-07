@@ -7,8 +7,10 @@ import Register from "./auth/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
-import MyEditor from "./components/MyEditor";
 import BlogPage from "./pages/BlogPage";
+import CreateBlog from "./pages/UpsertBlogPostPage";
+import UpsertBlogPostPage from "./pages/UpsertBlogPostPage";
+import Profile from "./pages/Profile";
 
 function AppRoutes() {
     const location = useLocation();
@@ -34,16 +36,33 @@ function AppRoutes() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route 
-                        path="/create-blog" 
-                        element={
-                            <ProtectedRoute>
-                                <MyEditor/>
-                            </ProtectedRoute>
-                        } 
-                    />
+
 
                     <Route path="/blog/:slug" element={<BlogPage/>} />
+
+                    <Route path="/blog/new"
+                            element = {
+                                <ProtectedRoute>
+                                    <UpsertBlogPostPage/>
+                                </ProtectedRoute>
+                            }
+                    />
+
+                    <Route path="/blog/edit/:blogId"
+                            element = {
+                                <ProtectedRoute>
+                                    <UpsertBlogPostPage/>
+                                </ProtectedRoute>
+                            }
+                    />
+
+                    <Route path="/profile/:userId"
+                            element = {
+                                <ProtectedRoute>
+                                    <Profile/>
+                                </ProtectedRoute>
+                            }
+                    />
                 </Routes>
             </div>
         </>

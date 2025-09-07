@@ -7,7 +7,21 @@
   --font-poppins : "Poppins", "sans-serif";
 }
 
+@keyframes indeterminate-progress {
+  0% { 
+    transform: translateX(-100%); 
+  }
+  100% { 
+    transform: translateX(400%); /* The bar is 1/4 (25%) width, so 400% ensures it moves completely across the 100% width container */
+  }
+}
+
 @layer utilities {
+
+   .animate-indeterminate-progress {
+    animation: indeterminate-progress 1.5s ease-in-out infinite;
+  }
+
   .underline-hover {
     @apply relative cursor-pointer text-white;
   }
