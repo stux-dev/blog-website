@@ -11,6 +11,17 @@ export const blogService = {
         }
     },
 
+    getAllForUser: async(userId) => {
+        try{
+            const response = await apiClient.get(`/api/blog/d/blogs/${userId}`);
+            
+            return response.data;
+        }catch(error){
+            console.error("Error Loading Blogs", error);
+            throw error;
+        }
+    },
+
     getBySlug: async(slug) => {
         try{
             const response = await apiClient.get(`/api/blog/${slug}`);
@@ -52,6 +63,30 @@ export const blogService = {
             console.error('Error updating blog:', error);
             throw error;
         }
-    }
+    },
+
+    getDailyStats : async(userId) => {
+        try{
+            const response = await apiClient.get(`/api/blog/d/stats/${userId}`);
+         
+            return response.data.dailyStats[0];
+        }catch(error){
+            console.error('Error Fetching DailyStats Data:', error);
+            throw error;
+        }
+    },
+
+    getUserInfo : async(userId) => {
+        try{
+            const response = await apiClient.get(`/api/blog/d/userinfo/${userId}`);
+    
+            return response.data.userInfo[0];
+        }catch(error){
+            console.error('Error Fetching UserInfo:', error);
+            throw error;
+        }
+    },
+
+
 
 }

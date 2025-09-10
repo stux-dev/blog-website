@@ -39,8 +39,10 @@
 
 
 
-
-
+html {
+  scrollbar-width: thin;  
+  scrollbar-color: #4f4f4f transparent; 
+}
 
 
 body {
