@@ -32,9 +32,9 @@ export const LoadingScreen = () => {
 
     return (
         <div
-            className={`fixed inset-0 bg-[#0F0F0F] flex flex-col items-center justify-center z-50 transition-opacity duration-500 ease-in-out ${!isLoading ? 'opacity-0' : 'opacity-100'}`}
+            className={`fixed inset-0 bg-[#0F0F0F] select-none flex flex-col items-center justify-center z-50 transition-opacity duration-500 ease-in-out ${!isLoading ? 'opacity-0' : 'opacity-100'}`}
         >
-            <div className="font-unbounded text-3xl font-[700] text-white mb-6">StuxDev</div>
+            <div className="font-unbounded text-3xl font-[700] text-white mb-6">StuxBlog</div>
             <ProgressBar />
         </div>
     );

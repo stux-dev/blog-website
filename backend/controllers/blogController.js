@@ -1,7 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { findUserById } from "../models/userModel.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-import { createBlog as createBlogPostInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , getBlogById as getBlogByIdInDb, updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb} from "../models/blogModel.js";
+import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , getBlogById as getBlogByIdInDb, updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb} from "../models/blogModel.js";
 
 
 export const createBlog = asyncHandler(async (req, res, next) => {
@@ -36,6 +36,20 @@ export const createBlog = asyncHandler(async (req, res, next) => {
     
 })
 
+export const getAllBlogsForUser = asyncHandler( async (req, res, next) => {
+   
+    const { userId } = req.params;
+
+    const blogData = await getAllBlogsForUserInDb(userId);
+
+    if(!blogData){
+        return next(new ErrorResponse("Failed to fetch blogs for this user.", 500));
+    }
+
+    res.status(200).json({
+        blogData
+    });
+});
 
 export const updateBlog = asyncHandler( async(req, res, next) =>{
     const blogData = req.body;
@@ -125,4 +139,36 @@ export const getBlogById = asyncHandler(async (req, res, next) => {
     }
 
     res.status(200).json(blog);
+})
+
+
+export const getDailyViewsForUser = asyncHandler(async (req, res, next)=>{
+    const userId = req.params.userId;
+
+    const data = await getDailyViewsForUserInDb(userId);
+
+    if(!data){
+        return next(new ErrorResponse(`Error fetching data in DB`, 500))
+    }
+
+    res.status(200).json({
+        message:"success",
+        dailyStats : data
+    })
+})
+
+export const getUserInfo = asyncHandler(async (req, res, next)=>{
+    const userId = req.params.userId;
+
+    const userInfo = await getUserInfoInDb(userId);
+
+    if(!userInfo){
+        return next(new ErrorResponse(`Error fetching userInfo in DB`, 500))
+    }
+
+    res.status(200).json({
+        message:"success",
+        userInfo
+    })
+
 })
