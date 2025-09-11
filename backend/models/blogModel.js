@@ -79,6 +79,7 @@ export const getAllBlogs = async () => {
                 b.title,
                 b.slug,
                 b.created_at,
+                b.view_count,
                 u.first_name,
                 u.last_name
             FROM 
@@ -102,6 +103,7 @@ export const getAllBlogsForUser = async (userId) => {
                 b.title,
                 b.slug,
                 b.created_at,
+                b.view_count,
                 u.first_name,
                 u.last_name
             FROM 

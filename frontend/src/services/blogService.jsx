@@ -69,7 +69,7 @@ export const blogService = {
         try{
             const response = await apiClient.get(`/api/blog/d/stats/${userId}`);
          
-            return response.data.dailyStats[0];
+            return response.data.dailyStats;
         }catch(error){
             console.error('Error Fetching DailyStats Data:', error);
             throw error;
@@ -79,7 +79,7 @@ export const blogService = {
     getUserInfo : async(userId) => {
         try{
             const response = await apiClient.get(`/api/blog/d/userinfo/${userId}`);
-    
+
             return response.data.userInfo[0];
         }catch(error){
             console.error('Error Fetching UserInfo:', error);

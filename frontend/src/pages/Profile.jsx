@@ -53,23 +53,37 @@ const processChartData = (apiData) => {
     return resultData;
 };
 
-
 const Profile = () => {
     const { userId } = useParams();
     const { showLoader, hideLoader } = useLoading();
 
     // Queries for user info, stats, and blogs (no changes needed here)
-    const { data: userInfo, isLoading: isUserInfoLoading, isError: isUserInfoError, error: userInfoError } = useQuery({
+    const {
+        data: userInfo,
+        isLoading: isUserInfoLoading,
+        isError: isUserInfoError,
+        error: userInfoError,
+    } = useQuery({
         queryKey: ["userInfo", userId],
         queryFn: () => blogService.getUserInfo(userId),
         enabled: !!userId,
     });
-    const { data: dailyStats, isLoading: isStatsLoading, isError: isStatsError, error: statsError } = useQuery({
+    const {
+        data: dailyStats,
+        isLoading: isStatsLoading,
+        isError: isStatsError,
+        error: statsError,
+    } = useQuery({
         queryKey: ["dailyStats", userId],
         queryFn: () => blogService.getDailyStats(userId),
         enabled: !!userId,
     });
-    const { data: userBlogs, isLoading: isBlogsLoading, isError: isBlogError, error: blogError } = useQuery({
+    const {
+        data: userBlogs,
+        isLoading: isBlogsLoading,
+        isError: isBlogError,
+        error: blogError,
+    } = useQuery({
         queryKey: ["userBlogs", userId],
         queryFn: () => blogService.getAllForUser(userId),
         enabled: !!userId,
@@ -83,25 +97,58 @@ const Profile = () => {
             hideLoader();
         }
         return () => hideLoader();
-    }, [isStatsLoading, isUserInfoLoading, isBlogsLoading, showLoader, hideLoader]);
+    }, [
+        isStatsLoading,
+        isUserInfoLoading,
+        isBlogsLoading,
+        showLoader,
+        hideLoader,
+    ]);
 
     // Error and loading states (no changes needed here)
     if (isUserInfoError || isStatsError || isBlogError) {
         const error = userInfoError || statsError || blogError;
-        return <div className="text-red-500 text-center p-10">Error loading profile: {error.message}</div>;
+        return (
+            <div className="text-red-500 text-center p-10">
+                Error loading profile: {error.message}
+            </div>
+        );
     }
     if (isUserInfoLoading || isStatsLoading || isBlogsLoading) {
         return null;
     }
     if (!userInfo || !dailyStats) {
-        return <div className="text-white text-center p-10">No data available.</div>;
+        return (
+            <div className="text-white text-center p-10">
+                No data available.
+            </div>
+        );
     }
 
     const chartData = processChartData(dailyStats);
-    const fullName = `${userInfo.first_name.charAt(0).toUpperCase() + userInfo.first_name.slice(1)} ${userInfo.last_name.charAt(0).toUpperCase() + userInfo.last_name.slice(1)}`;
-    const initials = `${userInfo.first_name.charAt(0).toUpperCase()}${userInfo.last_name.charAt(0).toUpperCase()}`;
-    const avatarPlaceholderUrl = `https://placehold.co/100x100/1a1a1a/ffffff?text=${initials}&font=inter`;
+    const fullName = `${
+        userInfo.first_name.charAt(0).toUpperCase() +
+        userInfo.first_name.slice(1)
+    } ${
+        userInfo.last_name.charAt(0).toUpperCase() + userInfo.last_name.slice(1)
+    }`;
+    const initials = `${userInfo.first_name
+        .charAt(0)
+        .toUpperCase()}${userInfo.last_name.charAt(0).toUpperCase()}`;
+    const avatarPlaceholderUrl = `https://placehold.co/100x100/000000/ffffff?text=${initials}&font=inter`;
     const dob = userInfo.dob.split("-").reverse().join("/");
+
+    const creationDate = userInfo.user_creation_date.split(" ")[0];
+    const date = new Date(creationDate);
+
+    const options = {
+        year: "2-digit",
+        month: "long",
+    };
+
+    const formattedDate = new Intl.DateTimeFormat("en-US", options)
+        .format(date)
+        .replace(" ", "'");
 
     return (
         <div className="bg-[#0F0F0F] min-h-screen font-sans text-white p-4 sm:p-6 lg:p-8">
@@ -112,8 +159,8 @@ const Profile = () => {
                 <div className="flex flex-col lg:flex-row h-auto gap-4">
                     {/* User Profile Card */}
                     {/* Takes full width on mobile (w-full) and 1/3 width on large screens (lg:w-1/3) */}
+                    {/* User Profile Card */}
                     <div className="w-full lg:w-1/3 bg-[#0F0F0F] border border-[#3C3C3C] rounded-lg p-6">
-                        {/* Avatar and info stack on extra-small screens and become a row on small screens (sm:flex-row) */}
                         <div className="flex flex-col sm:flex-row items-center justify-start">
                             <img
                                 className="w-24 h-24 rounded-full mr-0 sm:mr-6 border-2 border-[#3C3C3C]"
@@ -121,14 +168,25 @@ const Profile = () => {
                                 alt="User Avatar"
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = `https://placehold.co/100x100/CCCCCC/FFFFFF?text=U`;
+                                    e.target.src = `https://placehold.co/100x100/000000/FFFFFF?text=U`;
                                 }}
                             />
                             {/* Text is centered on extra-small screens and left-aligned on small and up */}
                             <div className="font-mono text-white mt-4 sm:mt-0 text-center sm:text-left">
-                                <div className="text-xl font-bold">{fullName}</div>
-                                <div className="text-sm text-gray-400">{dob}</div>
-                                <div className="text-sm text-gray-400">{userInfo.email}</div>
+                                <div className="text-xl font-bold">
+                                    {fullName}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                    {dob}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                    {userInfo.email}
+                                </div>
+
+                                {/* ✨ MOVED AND STYLED THIS DIV ✨ */}
+                                <div className="mt-2 inline-block bg-[#2A2A2A] text-gray-300 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                    Blogging since {formattedDate}
+                                </div>
                             </div>
                         </div>
                         <div className="w-full h-px bg-[#3C3C3C] my-6"></div>
@@ -143,16 +201,49 @@ const Profile = () => {
                         {/* IMPROVEMENT: Chart height is now responsive. Shorter on mobile, taller on desktop */}
                         <div className="flex-grow w-full h-64 sm:h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#3C3C3C" />
-                                    <XAxis dataKey="date" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                                <AreaChart
+                                    data={chartData}
+                                    margin={{
+                                        top: 10,
+                                        right: 30,
+                                        left: 0,
+                                        bottom: 0,
+                                    }}
+                                >
+                                    <CartesianGrid
+                                        strokeDasharray="3 3"
+                                        stroke="#3C3C3C"
+                                    />
+                                    <XAxis
+                                        dataKey="date"
+                                        stroke="#888888"
+                                        fontSize={12}
+                                        tickLine={false}
+                                        axisLine={false}
+                                    />
+                                    <YAxis
+                                        stroke="#888888"
+                                        fontSize={12}
+                                        tickLine={false}
+                                        axisLine={false}
+                                        allowDecimals={false}
+                                    />
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: "#1F1F1F", border: "1px solid #3C3C3C", borderRadius: "0.5rem" }}
+                                        contentStyle={{
+                                            backgroundColor: "#1F1F1F",
+                                            border: "1px solid #3C3C3C",
+                                            borderRadius: "0.5rem",
+                                        }}
                                         labelStyle={{ color: "#ffffff" }}
                                         itemStyle={{ color: "#8884d8" }}
                                     />
-                                    <Area type="monotone" dataKey="views" stroke="#8884d8" fill="#8884d8" fillOpacity={0.2} />
+                                    <Area
+                                        type="monotone"
+                                        dataKey="views"
+                                        stroke="#8884d8"
+                                        fill="#8884d8"
+                                        fillOpacity={0.2}
+                                    />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
@@ -164,9 +255,10 @@ const Profile = () => {
             <div className="h-px bg-[#3C3C3C] my-8 max-w-6xl mx-auto"></div>
 
             {/* Render the responsive BlogList component */}
-           <div className="font-unbounded text-2xl font-bold max-w-7xl mx-auto px-8 select-none">Your Blogs</div>
+            <div className="font-unbounded text-2xl font-bold max-w-7xl mx-auto px-8 select-none">
+                Your Blogs
+            </div>
             <BlogList blogs={userBlogs} />
-          
         </div>
     );
 };
