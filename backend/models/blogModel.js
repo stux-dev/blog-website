@@ -11,7 +11,9 @@ export const createBlog = async (userId, blogData) => {
 
     return insertedBlog.rows[0];
 };
-export const updateBlog = async (userId, blogId, blogData) => {
+
+
+export const updateBlog = async (userId, blogSlug, blogData) => {
     // Construct the SET part of the query dynamically
     // to only update fields that are actually provided.
     const fieldsToUpdate = {};
@@ -22,36 +24,32 @@ export const updateBlog = async (userId, blogId, blogData) => {
 
     // If there's nothing to update, we can return early.
     if (Object.keys(fieldsToUpdate).length === 0) {
-        return 0;
+        // It's better to return the existing blog than nothing.
+        return getBlogBySlug(blogSlug);
     }
 
-    // Add the automatically managed updated_at field
-    fieldsToUpdate.updated_at = "strftime('%s', 'now')";
+    // Add the automatically managed updated_at field. Using a placeholder for the value.
+    fieldsToUpdate.updated_at = Date.now() / 1000; // Unix timestamp in seconds
 
     const setClauses = Object.keys(fieldsToUpdate)
-        .map(
-            (key) =>
-                `${key} = ${key === "updated_at" ? fieldsToUpdate[key] : "?"}`
-        )
+        .map(key => `${key} = ?`)
         .join(", ");
 
-    const args = Object.entries(fieldsToUpdate)
-        .filter(([key]) => key !== "updated_at")
-        .map(([, value]) => value);
+    // Order of arguments matters: first the values for SET, then for WHERE.
+    const args = [
+        ...Object.values(fieldsToUpdate), // Values for the SET clause
+        blogSlug,                          // Original slug for the WHERE clause
+        userId                             // User ID for the WHERE clause
+    ];
 
-    // Add the id and user_id for the WHERE clause to the end of the args array
-    args.push(blogId, userId);
-
-    const updatedBlog = await db.execute({
+    const updateResult = await db.execute({
         sql: `UPDATE blogs 
               SET ${setClauses} 
-              WHERE id = ? AND user_id = ?`,
+              WHERE slug = ? AND user_id = ?`, // ✨ Changed WHERE clause to use slug
         args: args,
     });
 
-    // Return the number of rows affected.
-    // This will be 1 if the update was successful, and 0 otherwise.
-    return updatedBlog.rowsAffected;
+    return updateResult.rowsAffected;
 };
 
 export const deleteBlogById = async (id, user_id) => {
@@ -76,9 +74,11 @@ export const getAllBlogs = async () => {
         sql: `
             SELECT 
                 b.id,
+                b.user_id,  
                 b.title,
                 b.slug,
                 b.created_at,
+                b.view_count,
                 u.first_name,
                 u.last_name
             FROM 
@@ -99,9 +99,11 @@ export const getAllBlogsForUser = async (userId) => {
         sql: `
             SELECT 
                 b.id,
+                b.user_id,
                 b.title,
                 b.slug,
                 b.created_at,
+                b.view_count,
                 u.first_name,
                 u.last_name
             FROM 
@@ -167,24 +169,7 @@ export const getBlogBySlug = async (slug) => {
     return blog;
 };
 
-export const getBlogById = async (blogId) => {
-    const result = await db.execute({
-        sql: `
-            SELECT 
-                b.id, b.title, b.slug, b.content, b.created_at, b.updated_at,
-                u.first_name, u.last_name
-            FROM 
-                blogs AS b
-            LEFT JOIN 
-                users AS u ON b.user_id = u.id
-            WHERE 
-                b.id = ?;
-        `,
-        args: [blogId],
-    });
 
-    return result.rows.length > 0 ? result.rows[0] : null;
-};
 
 export const getDailyViewsForUser = async (userId) => {
     const result = await db.execute({

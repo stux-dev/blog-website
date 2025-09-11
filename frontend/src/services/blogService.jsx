@@ -65,11 +65,22 @@ export const blogService = {
         }
     },
 
+    delete: async(blogId) => {
+        try{
+            const response = await apiClient.delete(`/api/blog/${blogId}`);
+            return response.data;
+        }catch(error){
+            console.error('Error Deleting blog:', error);
+            throw error;
+        }
+
+    },
+
     getDailyStats : async(userId) => {
         try{
             const response = await apiClient.get(`/api/blog/d/stats/${userId}`);
          
-            return response.data.dailyStats[0];
+            return response.data.dailyStats;
         }catch(error){
             console.error('Error Fetching DailyStats Data:', error);
             throw error;
@@ -79,13 +90,15 @@ export const blogService = {
     getUserInfo : async(userId) => {
         try{
             const response = await apiClient.get(`/api/blog/d/userinfo/${userId}`);
-    
+
             return response.data.userInfo[0];
         }catch(error){
             console.error('Error Fetching UserInfo:', error);
             throw error;
         }
     },
+
+    
 
 
 
