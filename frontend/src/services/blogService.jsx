@@ -65,6 +65,17 @@ export const blogService = {
         }
     },
 
+    delete: async(blogId) => {
+        try{
+            const response = await apiClient.delete(`/api/blog/${blogId}`);
+            return response.data;
+        }catch(error){
+            console.error('Error Deleting blog:', error);
+            throw error;
+        }
+
+    },
+
     getDailyStats : async(userId) => {
         try{
             const response = await apiClient.get(`/api/blog/d/stats/${userId}`);
@@ -86,6 +97,8 @@ export const blogService = {
             throw error;
         }
     },
+
+    
 
 
 

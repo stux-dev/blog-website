@@ -1,7 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { findUserById } from "../models/userModel.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , getBlogById as getBlogByIdInDb, updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb} from "../models/blogModel.js";
+import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb} from "../models/blogModel.js";
 
 
 export const createBlog = asyncHandler(async (req, res, next) => {
@@ -31,7 +31,7 @@ export const createBlog = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
         message : "Blog Created Successfully",
-        blogId
+        slug: blogId.slug
     })
     
 })
@@ -53,11 +53,11 @@ export const getAllBlogsForUser = asyncHandler( async (req, res, next) => {
 
 export const updateBlog = asyncHandler( async(req, res, next) =>{
     const blogData = req.body;
-    const blogId = req.params.id;
+    const blogSlug = req.params.id;
     const userId = req.user?.id;
     
 
-    const rowsAffected = await updateBlogInDb(userId,blogId, blogData);
+    const rowsAffected = await updateBlogInDb(userId,blogSlug, blogData);
 
     if(!rowsAffected){
         return next(new ErrorResponse("Could not update the blog due to a server error.", 500));
@@ -71,10 +71,7 @@ export const updateBlog = asyncHandler( async(req, res, next) =>{
 
     res.status(200).json({
         message : "Blog Updated Successfully",
-        blogId : {
-            id : blogId,
-            slug : blogData.slug
-        }
+        slug : blogData.slug
     })
 })
 
@@ -129,17 +126,6 @@ export const getBlogBySlug = asyncHandler(async (req, res, next) => {
     res.status(200).json(blog);
 })
 
-export const getBlogById = asyncHandler(async (req, res, next) => {
-    const blogId = req.params.id;
-    
-    const blog = await getBlogByIdInDb(blogId);
-
-    if (!blog) {
-            return next(new ErrorResponse(`Blog not found with blogId: ${blogId}`, 404));
-    }
-
-    res.status(200).json(blog);
-})
 
 
 export const getDailyViewsForUser = asyncHandler(async (req, res, next)=>{

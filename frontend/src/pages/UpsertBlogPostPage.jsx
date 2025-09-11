@@ -8,11 +8,12 @@ import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
 
 const UpsertBlogPostPage = () => {
-    const { blogId } = useParams();
+    const { blogSlug } = useParams();
+
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const isEditMode = Boolean(blogId);
+    const isEditMode = Boolean(blogSlug);
 
     const [title, setTitle] = useState('');
     const [slug, setSlug] = useState('');
@@ -30,9 +31,10 @@ const UpsertBlogPostPage = () => {
     }, editor);
 
     const { data: existingBlog, isLoading: isLoadingBlog, isError } = useQuery({
-        queryKey: ['blog', blogId],
-        queryFn: () => blogService.getById(blogId),
+        queryKey: ['blog', blogSlug],
+        queryFn: () => blogService.getBySlug(blogSlug),
         enabled: isEditMode,
+        staleTime: Infinity
     });
 
     // FIX 2: Correctly populate the form AND the editor in edit mode
@@ -62,14 +64,14 @@ const UpsertBlogPostPage = () => {
     const { mutate, isPending: isSaving } = useMutation({
         mutationFn: (blogData) => {
             return isEditMode
-                ? blogService.update(blogId, blogData)
+                ? blogService.update(blogSlug, blogData)
                 : blogService.create(blogData);
         },
         onSuccess: (savedPost) => {
             queryClient.invalidateQueries({ queryKey: ['blogs'] });
             // Invalidate the specific blog query to ensure fresh data if we revisit
-            queryClient.invalidateQueries({ queryKey: ['blog', blogId] }); 
-            navigate(`/blog/${savedPost.blogId.slug}`);
+            queryClient.invalidateQueries({ queryKey: ['blog', blogSlug] }); 
+            navigate(`/blog/${savedPost.slug}`);
         },
         onError: (error) => {
             console.error('Failed to save blog post:', error);
