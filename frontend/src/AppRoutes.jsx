@@ -47,7 +47,7 @@ function AppRoutes() {
                             }
                     />
 
-                    <Route path="/blog/edit/:blogId"
+                    <Route path="/blog/edit/:blogSlug"
                             element = {
                                 <ProtectedRoute>
                                     <UpsertBlogPostPage/>
