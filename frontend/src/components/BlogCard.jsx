@@ -20,6 +20,7 @@ const BlogCard = ({ blog }) => {
 
     return (
         <div className="relative mb-3 group bg-[#1A1A1A] border font-poppins border-[#3C3C3C] rounded-lg p-6 shadow-md hover:shadow-lg hover:border-gray-500 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+
             <div className="flex flex-col h-full">
                 {/* Blog Title */}
                 <h2 className="text-xl md:text-2xl font-bold text-gray-100 mb-3 flex-grow group-hover:underline decoration-2 underline-offset-4">

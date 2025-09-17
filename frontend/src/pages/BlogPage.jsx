@@ -7,13 +7,13 @@ import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { useLoading } from "../context/LoadingContext";
-import { useAuth } from "../context/AuthContext"; // ✨ 1. Import useAuth
-import { FilePenLine, Trash2 } from "lucide-react"; // ✨ 2. Import icons
+import { useAuth } from "../context/AuthContext"; 
+import { FilePenLine, Trash2 } from "lucide-react"; 
 
 const BlogPage = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { user } = useAuth(); // ✨ 3. Get the logged-in user
+    const { user } = useAuth();
     const { showLoader, hideLoader } = useLoading();
 
     const { data: blog, error, isLoading } = useQuery({
@@ -22,8 +22,7 @@ const BlogPage = () => {
         enabled: !!slug,
         refetchOnWindowFocus: false,
     });
-    
-    // ✨ 4. Check if the logged-in user is the author
+
     const isAuthor = useMemo(() => {
         if (!user || !blog) return false;
         return user.id === blog.user_id;
@@ -52,7 +51,7 @@ const BlogPage = () => {
             try {
                 await blogService.delete(blog.id); 
                 alert("Blog post deleted successfully.");
-                navigate("/dashboard"); // Redirect to home page after deletion
+                navigate("/dashboard"); 
             } catch (err) {
                 alert("Failed to delete the blog post.");
                 console.error(err);
@@ -67,7 +66,7 @@ const BlogPage = () => {
     };
 
     if (error) return <div className="text-white text-center p-10">Error Loading Blog Post</div>;
-    if (isLoading || !blog) return null; // Let the loader context handle the UI
+    if (isLoading || !blog) return null; 
 
     return (
         <div className="bg-[#0F0F0F] min-h-screen font-sans text-white p-4 sm:p-6 md:p-8">
@@ -111,7 +110,7 @@ const BlogPage = () => {
 
                 {/* BlockNote editor view */}
                 <div className="prose prose-invert prose-lg max-w-none">
-                     <BlockNoteView editor={editor} />
+                     <BlockNoteView editor={editor} editable={false} />
                 </div>
             </div>
         </div>
