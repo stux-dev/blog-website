@@ -110,7 +110,7 @@ const BlogPage = () => {
 
                 {/* BlockNote editor view */}
                 <div className="prose prose-invert prose-lg max-w-none">
-                     <BlockNoteView editor={editor} editable={false} />
+                     <BlockNoteView editor={editor} editable={false} className="Bdisplay"/>
                 </div>
             </div>
         </div>
