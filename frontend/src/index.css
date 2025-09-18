@@ -35,6 +35,10 @@
   .underline-hover:hover::after {
     @apply w-full;
   }
+  
+  .Bdisplay .bn-editor {
+    padding-inline: 20px !important;
+  }
 }
 
 
@@ -48,3 +52,4 @@ html {
 body {
   background-color: #0F0F0F;
 }
+/* Hides the side handle ONLY when the editor is not editable */
