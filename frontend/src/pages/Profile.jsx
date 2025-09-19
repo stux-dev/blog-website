@@ -6,6 +6,7 @@ import { useLoading } from "../context/LoadingContext";
 import { useEffect, useMemo } from "react";
 import BlogList from "../components/BlogList";
 import { Plus } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Custom Hook to encapsulate data fetching
 const useProfileData = (userId) => {
@@ -87,21 +88,6 @@ const UserProfileCard = ({ userInfo }) => {
     );
 };
 
-// Reusable component for the create blog button card
-// Reusable component for the create blog button card
-const CreateBlogButton = () => (
-    // No changes to this div
-    <div className="bg-[#0F0F0F] border border-[#3C3C3C] rounded-lg p-4 flex flex-grow items-center">
-        <Link 
-            to="/blog/new" 
-            className="flex items-center justify-center w-full border-2 border-[#8884d8] text-[#8884d8] font-bold py-3 px-4 rounded-lg transition-all duration-300 hover:bg-[#8884d8] hover:text-white"
-        >
-            {/* ✨ Swapped FaPlus with the Lucide Plus icon ✨ */}
-            <Plus className="mr-2 h-4 w-4" />
-            <span>Create New Blog</span>
-        </Link>
-    </div>
-);
 // Helper function for chart data processing
 const processChartData = (apiData) => {
     // This function is fine as is, but can also be memoized if needed
@@ -142,12 +128,12 @@ const Profile = () => {
     if (!userInfo) return <div className="text-white text-center p-10">No data available.</div>;
 
     return (
+      <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:0.5}}>
         <div className="bg-[#0F0F0F] min-h-screen font-sans text-white p-4 sm:p-6 lg:p-8">
             <div className="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row h-auto gap-4">
                     <div className="w-full lg:w-1/3 flex flex-col gap-4">
                         <UserProfileCard userInfo={userInfo} />
-                        <CreateBlogButton />
                     </div>
                     <div className="w-full lg:w-2/3 bg-[#0F0F0F] border border-[#3C3C3C] rounded-lg p-6 flex flex-col">
                         <h2 className="text-xl font-bold font-mono text-white mb-4">Daily Views (Last 7 Days)</h2>
@@ -169,6 +155,7 @@ const Profile = () => {
                 <div className="font-unbounded text-2xl font-bold max-w-7xl mx-auto px-8 select-none">Your Blogs</div>
                 <BlogList blogs={userBlogs || []} />
         </div>
+      </motion.div>
     );
 };
 

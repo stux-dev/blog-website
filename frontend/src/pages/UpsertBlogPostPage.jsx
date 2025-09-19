@@ -6,6 +6,7 @@ import { useCreateBlockNote, useEditorChange } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
+import { motion } from 'framer-motion';
 
 const UpsertBlogPostPage = () => {
     const { blogSlug } = useParams();
@@ -109,6 +110,13 @@ const UpsertBlogPostPage = () => {
     }
 
     return (
+      <motion.div
+        initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}  
+      >
+      
         // Your JSX remains the same
         // A good practice with Shadcn/ui is to use a utility function
 // for class names, like `cn`, but for this example, we'll just use strings.
@@ -214,6 +222,7 @@ const UpsertBlogPostPage = () => {
         </form>
     </div>
 </div>
+      </motion.div>
     );
 };
 
