@@ -9,6 +9,7 @@ import "@blocknote/core/fonts/inter.css";
 import { useLoading } from "../context/LoadingContext";
 import { useAuth } from "../context/AuthContext"; 
 import { FilePenLine, Trash2 } from "lucide-react"; 
+import { motion } from 'framer-motion';
 
 const BlogPage = () => {
     const { slug } = useParams();
@@ -69,6 +70,7 @@ const BlogPage = () => {
     if (isLoading || !blog) return null; 
 
     return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <div className="bg-[#0F0F0F] min-h-screen font-sans text-white p-4 sm:p-6 md:p-8">
             <div className="max-w-4xl mx-auto">
                 {/* Blog Header */}
@@ -114,6 +116,7 @@ const BlogPage = () => {
                 </div>
             </div>
         </div>
+      </motion.div>
     );
 };
 
