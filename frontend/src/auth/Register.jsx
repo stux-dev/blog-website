@@ -180,6 +180,7 @@ const navigate = useNavigate();
             <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
               We've sent a verification code to your email <br/> <strong>{form.email}</strong>
             </p>
+            <p className="text-center text-red-600">if Verification code is not in the inbox. check in the spam!!</p>
             <div className="flex justify-center gap-2">
               {otp.map((data, index) => {
                 return (

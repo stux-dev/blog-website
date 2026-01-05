@@ -117,9 +117,6 @@ const UpsertBlogPostPage = () => {
               transition={{ duration: 0.5 }}  
       >
       
-        // Your JSX remains the same
-        // A good practice with Shadcn/ui is to use a utility function
-// for class names, like `cn`, but for this example, we'll just use strings.
 
 <div className="bg-[#0F0F0F] min-h-screen text-gray-200 font-sans p-4 sm:p-6 lg:p-8">
     <div className="max-w-4xl mx-auto">

@@ -1,0 +1,25 @@
+{
+  "name": "stuxblog",
+  "version": "1.0.0",
+  "description": "Live Demo : https://blog-frontend-49ur.onrender.com",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "concurrently \"npm run dev --prefix frontend\" \"npm run start --prefix backend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stux-dev/blog-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/stux-dev/blog-website/issues"
+  },
+  "homepage": "https://github.com/stux-dev/blog-website#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
