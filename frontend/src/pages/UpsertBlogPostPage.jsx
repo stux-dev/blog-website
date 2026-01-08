@@ -116,7 +116,6 @@ const UpsertBlogPostPage = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}  
       >
-      
 
 <div className="bg-[#0F0F0F] min-h-screen text-gray-200 font-sans p-4 sm:p-6 lg:p-8">
     <div className="max-w-4xl mx-auto">
