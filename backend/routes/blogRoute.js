@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBlog, deleteBlog, getAllBlogs, getBlogBySlug, updateBlog, getDailyViewsForUser, getUserInfo, getAllBlogsForUser } from "../controllers/blogController.js";
+import { createBlog, deleteBlog, getAllBlogs, getBlogBySlug, updateBlog, getDailyViewsForUser, getUserInfo, getAllBlogsForUser, createComment, getAllComments } from "../controllers/blogController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 
 
@@ -18,5 +18,9 @@ router.get("/d/blogs/:userId", getAllBlogsForUser);
 // Static before Dynamic bcz of the waterfall method
 router.get("/:slug", getBlogBySlug);
 
+
+//comment APIs
+router.get("/comments/:blogId", authMiddleware, getAllComments);
+router.post("/comment/:id", authMiddleware, createComment);
 
 export default router;

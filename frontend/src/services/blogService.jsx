@@ -97,6 +97,18 @@ export const blogService = {
             throw error;
         }
     },
+    
+    getCommentsByBlogId : async(blogId) => {
+      try{
+        const response = await apiClient.get(`/api/blog/comments/${blogId}`);
+       
+        return response.data.comments;
+        
+      }catch(error){
+        console.error('Error Fetching Comments:', error);
+        throw error;
+      }
+    }
 
     
 

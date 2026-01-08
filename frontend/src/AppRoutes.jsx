@@ -24,7 +24,7 @@ function AppRoutes() {
             <div className={isNoNavPage ? "" : "pt-16"}>
                 <Routes>
                     <Route path="*" element={<NotFound />} />
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Dashboard />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route

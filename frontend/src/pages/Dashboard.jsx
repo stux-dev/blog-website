@@ -47,7 +47,7 @@ const Dashboard = () => {
           Create Blog
         </Link>
         
-       </div>
+       </div> 
 
       <div>
         <BlogList blogs={blogs} />

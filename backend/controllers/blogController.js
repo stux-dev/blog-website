@@ -1,7 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { findUserById } from "../models/userModel.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb} from "../models/blogModel.js";
+import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb, createComment as createCommentInDb, getAllComments as getAllCommentsInDb} from "../models/blogModel.js";
 
 
 export const createBlog = asyncHandler(async (req, res, next) => {
@@ -157,4 +157,41 @@ export const getUserInfo = asyncHandler(async (req, res, next)=>{
         userInfo
     })
 
+})
+
+//Comment Controller  
+
+export const createComment = asyncHandler(async(req, res, next) => {
+  const blogId = req.params.id;
+  const content = req.body.comment;
+  
+  const commentData = await createCommentInDb(req.user.id, blogId, content)
+  
+  if(!commentData){
+    return next(new ErrorResponse(`Error creating comment in DB`, 500))
+  }
+  
+  res.status(200).json({
+    message : "Comment Created!",
+    commentData
+    
+  })
+})
+
+
+export const getAllComments = asyncHandler(async(req, res, next) => {
+  const {blogId} = req.params;
+
+
+  const comments = await getAllCommentsInDb(blogId);
+
+  if(!comments){
+    return next(new ErrorResponse(`Error fetching comments in DB`, 500))
+  }
+
+  res.status(200).json({
+    message : "Comments fetched!",
+    comments
+    
+  })
 })

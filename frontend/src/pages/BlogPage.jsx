@@ -23,6 +23,15 @@ const BlogPage = () => {
         enabled: !!slug,
         refetchOnWindowFocus: false,
     });
+    
+    const { data: comments } = useQuery({
+        queryKey: ["comments", blog?.id],
+        queryFn: () => blogService.getCommentsByBlogId(blog?.id),
+        enabled: !!blog,
+        refetchOnWindowFocus: false,
+    });
+    
+
 
     const isAuthor = useMemo(() => {
         if (!user || !blog) return false;
@@ -114,6 +123,41 @@ const BlogPage = () => {
                 <div className="prose prose-invert prose-lg max-w-none">
                      <BlockNoteView editor={editor} editable={false} className="Bdisplay"/>
                 </div>
+                
+                {/* ADD COMMENT SECTION */}
+                {/* Comments Section */}
+                <div className="mt-16">
+                  <h2 className="text-2xl font-semibold mb-6">
+                    Comments ({comments?.length || 0})
+                  </h2>
+                
+                  <div className="space-y-6">
+                    {!comments || comments.length === 0 ? (
+                      <p className="text-gray-400">No comments yet.</p>
+                    ) : (
+                      comments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="bg-[#151515] p-4 rounded-lg border border-gray-700"
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm font-medium text-gray-300">
+                              User ID: {comment.user_id.slice(0, 8)}…
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {formatDate(comment.created_at)}
+                            </span>
+                          </div>
+                
+                          <p className="text-gray-200 leading-relaxed">
+                            {comment.content}
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
             </div>
         </div>
       </motion.div>
