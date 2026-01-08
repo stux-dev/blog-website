@@ -237,7 +237,18 @@ export const createComment = async(userId, blogId, content) => {
 
 export const getAllComments = async(blogId) => {
   const result = await db.execute({
-    sql: `SELECT * FROM comments WHERE blog_id = ?`,
+    sql: `SELECT 
+      c.id,
+      c.blog_id,
+      c.content,
+      c.created_at,
+      u.id as userId,
+      u.first_name AS firstName,
+      u.last_name AS lastName
+    FROM comments c
+    JOIN users u ON c.user_id = u.id
+    WHERE c.blog_id = ?
+    ORDER BY c.created_at DESC;`,
     args: [blogId]
   })
   

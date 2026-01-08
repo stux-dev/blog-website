@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { blogService } from "../services/blogService";
 import { useCreateBlockNote } from "@blocknote/react";
@@ -10,6 +10,7 @@ import { useLoading } from "../context/LoadingContext";
 import { useAuth } from "../context/AuthContext"; 
 import { FilePenLine, Trash2 } from "lucide-react"; 
 import { motion } from 'framer-motion';
+
 
 const BlogPage = () => {
     const { slug } = useParams();
@@ -30,6 +31,32 @@ const BlogPage = () => {
         enabled: !!blog,
         refetchOnWindowFocus: false,
     });
+    
+    // Comment Form Section
+    const queryClient = useQueryClient();
+    const [commentText, setCommentText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    const handleCommentSubmit = async (e) => {
+      e.preventDefault();
+      if (!commentText.trim()) return;
+    
+      try {
+        setIsSubmitting(true);
+        await blogService.createComment(blog.id, commentText);
+    
+        setCommentText("");
+        queryClient.invalidateQueries(["comments", blog.id]); // refresh comments
+    
+      } catch (err) {
+        console.error(err);
+        alert("Failed to post comment.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+ 
     
 
 
@@ -125,6 +152,38 @@ const BlogPage = () => {
                 </div>
                 
                 {/* ADD COMMENT SECTION */}
+                
+                {/* COMMENT FORM*/}
+                {/* COMMENT FORM */}
+                <div className="mt-12">
+                  <h3 className="text-xl font-semibold mb-4">Add a Comment</h3>
+                
+                  {!user ? (
+                    <p className="text-gray-400">
+                      You must <Link to="/login" className="text-blue-500 underline">login</Link> to comment.
+                    </p>
+                  ) : (
+                    <form onSubmit={handleCommentSubmit} className="space-y-4">
+                      <textarea
+                        className="w-full bg-[#151515] text-white border border-gray-700 rounded-lg p-3 resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+                        rows={4}
+                        placeholder="Write your comment..."
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                      />
+                
+                      <button
+                        type="submit"
+                        disabled={isSubmitting || !commentText.trim()}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? "Posting..." : "Post Comment"}
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+                
                 {/* Comments Section */}
                 <div className="mt-16">
                   <h2 className="text-2xl font-semibold mb-6">
@@ -142,8 +201,11 @@ const BlogPage = () => {
                         >
                           <div className="flex justify-between items-center mb-2">
                             <span className="text-sm font-medium text-gray-300">
-                              User ID: {comment.user_id.slice(0, 8)}…
+                              {comment.user
+                                ? `${comment.user.firstName} ${comment.user.lastName}`
+                                : "Unknown User"}
                             </span>
+                
                             <span className="text-xs text-gray-400">
                               {formatDate(comment.created_at)}
                             </span>
@@ -157,6 +219,7 @@ const BlogPage = () => {
                     )}
                   </div>
                 </div>
+
 
             </div>
         </div>
