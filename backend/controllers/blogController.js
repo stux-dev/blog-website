@@ -1,7 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { findUserById } from "../models/userModel.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb} from "../models/blogModel.js";
+import { createBlog as createBlogPostInDb, getAllBlogsForUser as getAllBlogsForUserInDb ,getUserInfo as getUserInfoInDb, getAllBlogs as getAllBlogInDb, getBlogBySlug as getBlogBySlugInDb , updateBlog as updateBlogInDb, deleteBlogById as deleteBlogByIdInDb, getDailyViewsForUser as getDailyViewsForUserInDb, createComment as createCommentInDb, getAllComments as getAllCommentsInDb} from "../models/blogModel.js";
 
 
 export const createBlog = asyncHandler(async (req, res, next) => {
@@ -158,3 +158,52 @@ export const getUserInfo = asyncHandler(async (req, res, next)=>{
     })
 
 })
+
+//Comment Controller  
+
+export const createComment = asyncHandler(async(req, res, next) => {
+  const userId = req.user.id;
+  const blogId = req.params.id;
+  const content = req.body.commentText;
+  const commentData = await createCommentInDb(userId, blogId, content)
+  
+  if(!commentData){
+    return next(new ErrorResponse(`Error creating comment in DB`, 500))
+  }
+  
+  res.status(200).json({
+    message : "Comment Created!",
+    commentData
+    
+  })
+})
+
+
+export const getAllComments = asyncHandler(async (req, res, next) => {
+  const { blogId } = req.params;
+
+  const rows = await getAllCommentsInDb(blogId);
+
+  if (!rows) {
+    return next(new ErrorResponse(`Error fetching comments in DB`, 500));
+  }
+
+  // Format rows into desired shape
+  const comments = rows.map(r => ({
+    id: r.id,
+    blog_id: r.blog_id,
+    content: r.content,
+    created_at: r.created_at,
+    user: {
+      id: r.userId,
+      firstName: r.firstName,
+      lastName: r.lastName
+    }
+  }));
+
+  res.status(200).json({
+    message: "Comments fetched!",
+    comments
+  });
+});
+

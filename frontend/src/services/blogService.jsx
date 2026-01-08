@@ -97,6 +97,28 @@ export const blogService = {
             throw error;
         }
     },
+    
+    getCommentsByBlogId : async(blogId) => {
+      try{
+        const response = await apiClient.get(`/api/blog/comments/${blogId}`);
+        
+        return response.data.comments;
+        
+      }catch(error){
+        console.error('Error Fetching Comments:', error);
+        throw error;
+      }
+    },
+    
+    createComment : async(blogId, commentText) => {
+      try{
+        const { data } = await apiClient.post(`/api/blog/comment/${blogId}`, {commentText});
+        return data;
+      }catch(error){
+        console.error('Error Creating Comment', error);
+        throw error;
+      }
+    }
 
     
 

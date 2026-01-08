@@ -221,4 +221,40 @@ export const getUserInfo = async (userId) => {
     return result.rows;
 };
 
+//Create Comment in DB
 
+
+export const createComment = async(userId, blogId, content) => {
+  const result = await db.execute({
+    sql: `INSERT INTO comments (blog_id, user_id, content)
+        VALUES (?, ?, ?)
+        RETURNING id`,
+    args: [blogId, userId, content],
+  });
+  
+  return result.rows;
+}
+
+export const getAllComments = async(blogId) => {
+  const result = await db.execute({
+    sql: `SELECT 
+      c.id,
+      c.blog_id,
+      c.content,
+      c.created_at,
+      u.id as userId,
+      u.first_name AS firstName,
+      u.last_name AS lastName
+    FROM comments c
+    JOIN users u ON c.user_id = u.id
+    WHERE c.blog_id = ?
+    ORDER BY c.created_at DESC;`,
+    args: [blogId]
+  })
+  
+  if(result.rows.length === 0) {
+    return [];
+  }
+
+  return result.rows;
+}
